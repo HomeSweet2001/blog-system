@@ -40,7 +40,7 @@ export default function Navbar() {
     }`;
 
   const linkStyle = ({ isActive }) =>
-    isActive ? { background: 'var(--c-surface)', color: 'var(--c-primary)' } : undefined;
+    isActive ? { color: 'var(--c-primary)' } : undefined;
 
   return (
     <header
