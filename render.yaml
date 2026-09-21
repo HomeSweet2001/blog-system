@@ -13,6 +13,8 @@ services:
         value: 22.12.0
       - key: NODE_ENV
         value: production
+      - key: NPM_CONFIG_INCLUDE
+        value: dev
       - key: DATABASE_URL
         sync: false
       - key: JWT_SECRET
