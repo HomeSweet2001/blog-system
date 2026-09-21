@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: blog-platform
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 22.12.0
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: blog-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: SITE_URL
+        sync: false
+      # Pasta raiz no Cloudinary. Cada blog cria uma subpasta propria dentro dela.
+      # Ex.: blog-platform/meu-blog/posts
+      - key: CLOUDINARY_FOLDER
+        value: blog-platform
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+
+databases:
+  - name: blog-db
+    plan: free
+    databaseName: blog
+    user: blog_user
+    region: oregon

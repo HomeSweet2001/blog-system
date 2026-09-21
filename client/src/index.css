@@ -1,0 +1,261 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------
+   Variaveis de tema (sobrescritas dinamicamente pelo ThemeProvider
+   a partir das configuracoes salvas no painel administrativo).
+------------------------------------------------------------------- */
+:root {
+  --c-primary: #6366f1;
+  --c-secondary: #0f172a;
+  --c-accent: #f59e0b;
+  --c-text: #1f2937;
+  --c-bg: #ffffff;
+  --c-surface: #f8fafc;
+  --c-border: #e5e7eb;
+  --font-heading: 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --radius: 12px;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--c-bg);
+    color: var(--c-text);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    color: var(--c-text);
+    line-height: 1.2;
+  }
+
+  ::selection {
+    background: var(--c-primary);
+    color: #fff;
+  }
+
+  * {
+    border-color: var(--c-border);
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-theme px-4 py-2.5 text-sm font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-primary {
+    background-color: var(--c-primary);
+    color: #fff;
+  }
+  .btn-primary:hover {
+    filter: brightness(0.92);
+  }
+
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--c-text);
+    border: 1px solid var(--c-border);
+  }
+  .btn-ghost:hover {
+    background-color: var(--c-surface);
+  }
+
+  .btn-accent {
+    background-color: var(--c-accent);
+    color: #111827;
+  }
+
+  .input {
+    @apply w-full rounded-theme border px-3.5 py-2.5 text-sm outline-none transition;
+    background-color: var(--c-bg);
+    color: var(--c-text);
+    border-color: var(--c-border);
+  }
+  .input:focus {
+    border-color: var(--c-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--c-primary) 22%, transparent);
+  }
+
+  .label {
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wide opacity-70;
+  }
+
+  .card {
+    background-color: var(--c-bg);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius);
+  }
+
+  .chip {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Estilos de conteudo (markdown renderizado)
+------------------------------------------------------------------- */
+.prose-blog {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: var(--c-text);
+  word-break: break-word;
+}
+
+.prose-blog > * + * {
+  margin-top: 1.15em;
+}
+
+.prose-blog h1, .prose-blog h2, .prose-blog h3, .prose-blog h4 {
+  margin-top: 1.8em;
+  margin-bottom: 0.6em;
+  font-weight: 800;
+}
+.prose-blog h1 { font-size: 1.9rem; }
+.prose-blog h2 { font-size: 1.55rem; }
+.prose-blog h3 { font-size: 1.28rem; }
+
+.prose-blog a {
+  color: var(--c-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.prose-blog strong { font-weight: 700; }
+
+.prose-blog ul, .prose-blog ol {
+  padding-left: 1.5rem;
+}
+.prose-blog ul { list-style: disc; }
+.prose-blog ol { list-style: decimal; }
+.prose-blog li + li { margin-top: 0.35rem; }
+
+.prose-blog blockquote {
+  border-left: 4px solid var(--c-primary);
+  padding: 0.35rem 0 0.35rem 1.1rem;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.prose-blog code {
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: 6px;
+  padding: 0.15em 0.4em;
+  font-size: 0.9em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.prose-blog pre {
+  background: var(--c-secondary);
+  color: #e2e8f0;
+  padding: 1.1rem 1.25rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.prose-blog pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: inherit;
+}
+
+.prose-blog img {
+  border-radius: var(--radius);
+  max-width: 100%;
+  height: auto;
+}
+
+.prose-blog hr {
+  border: 0;
+  border-top: 1px solid var(--c-border);
+}
+
+.prose-blog table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+.prose-blog th, .prose-blog td {
+  border: 1px solid var(--c-border);
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+}
+.prose-blog th {
+  background: var(--c-surface);
+  font-weight: 700;
+}
+
+/* Alinhamento de blocos (paragrafos, titulos, listas, imagens, citacoes) */
+.prose-blog {
+  text-align: left; /* padrao explicito do corpo do post */
+}
+
+.prose-blog .align-left {
+  text-align: left;
+}
+.prose-blog .align-center {
+  text-align: center;
+}
+.prose-blog .align-right {
+  text-align: right;
+}
+.prose-blog .align-justify {
+  text-align: justify;
+  /* Em colunas estreitas (celular) o justificado abre buracos entre as palavras.
+     A hifenizacao automatica distribui melhor as linhas. */
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  overflow-wrap: break-word;
+}
+
+/* Mantem o espacamento entre blocos dentro de um wrapper alinhado */
+.prose-blog > .align-left > * + *,
+.prose-blog > .align-center > * + *,
+.prose-blog > .align-right > * + *,
+.prose-blog > .align-justify > * + * {
+  margin-top: 1.15em;
+}
+
+/* Listas alinhadas ao centro/direita/justificado: mantem os marcadores
+   junto ao texto em vez de espalha-los pela largura toda */
+.prose-blog .align-center ul,
+.prose-blog .align-center ol,
+.prose-blog .align-right ul,
+.prose-blog .align-right ol,
+.prose-blog .align-justify ul,
+.prose-blog .align-justify ol {
+  display: inline-block;
+  text-align: left;
+}
+
+/* Scrollbar discreta */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--c-text) 25%, transparent);
+  border-radius: 99px;
+  border: 2px solid var(--c-bg);
+}
+
+/* Animacoes */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up { animation: fadeUp 0.45s ease both; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+.animate-spin-slow { animation: spin 1s linear infinite; }

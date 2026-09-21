@@ -1,0 +1,21 @@
+{
+  "name": "blog-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Plataforma de blog completa (estilo Blogger/WordPress) com painel administrativo, temas personalizaveis e templates de layout. Deploy pronto para Render.",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "install:all": "npm install --prefix server && npm install --prefix client",
+    "build": "npm run install:all && npm run build --prefix client",
+    "start": "node server/src/index.js",
+    "dev": "node scripts/dev.mjs",
+    "dev:server": "npm run dev --prefix server",
+    "dev:client": "npm run dev --prefix client",
+    "setup": "node server/src/setup.js",
+    "doctor": "node server/src/doctor.js",
+    "migrate": "node server/src/migrate.js",
+    "db:reset-hard": "node server/src/reset.js"
+  }
+}
