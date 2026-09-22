@@ -1,23 +1,29 @@
-import { Link } from 'react-router-dom';
-import { ArrowRight, Clock, Eye } from 'lucide-react';
-import { formatDate, readingTime } from '../../lib/markdown.js';
-import { useBlog } from '../../context/BlogContext.jsx';
-import { blogPaths } from '../../lib/urls.js';
+import { Link } from "react-router-dom";
+import { ArrowRight, Clock, Eye } from "lucide-react";
+import { formatDate, readingTime } from "../../lib/markdown.js";
+import { useBlog } from "../../context/BlogContext.jsx";
+import { blogPaths } from "../../lib/urls.js";
 
-export default function PostCard({ post, variant = 'default' }) {
+export default function PostCard({ post, variant = "default" }) {
   const { blog } = useBlog();
-  const paths = blogPaths(blog?.slug || '');
+  const paths = blogPaths(blog?.slug || "");
   const href = paths.post(post.slug);
 
-  if (variant === 'minimal') {
+  if (variant === "minimal") {
     return (
-      <article className="group border-b py-6 last:border-b-0" style={{ borderColor: 'var(--c-border)' }}>
+      <article
+        className="group border-b py-6 last:border-b-0"
+        style={{ borderColor: "var(--c-border)" }}
+      >
         <div className="flex flex-wrap items-center gap-3 text-xs opacity-70">
           {post.category_name && (
             <Link
               to={paths.category(post.category_slug)}
               className="chip no-underline"
-              style={{ background: `${post.category_color || 'var(--c-primary)'}22`, color: post.category_color || 'var(--c-primary)' }}
+              style={{
+                background: `${post.category_color || "var(--c-primary)"}22`,
+                color: post.category_color || "var(--c-primary)",
+              }}
             >
               {post.category_name}
             </Link>
@@ -34,12 +40,12 @@ export default function PostCard({ post, variant = 'default' }) {
           </Link>
         </h3>
         <p className="mt-2 line-clamp-3 text-sm leading-relaxed opacity-75">
-          {post.excerpt || ''}
+          {post.excerpt || ""}
         </p>
         <Link
           to={href}
           className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold no-underline"
-          style={{ color: 'var(--c-primary)' }}
+          style={{ color: "var(--c-primary)" }}
         >
           Ler mais <ArrowRight className="h-3.5 w-3.5" />
         </Link>
@@ -47,17 +53,17 @@ export default function PostCard({ post, variant = 'default' }) {
     );
   }
 
-  const horizontal = variant === 'horizontal';
+  const horizontal = variant === "horizontal";
 
   return (
     <article
       className={`card group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
-        horizontal ? 'sm:flex' : ''
+        horizontal ? "sm:flex" : ""
       }`}
     >
       <Link
         to={href}
-        className={`block overflow-hidden ${horizontal ? 'sm:w-2/5 sm:shrink-0' : ''}`}
+        className={`block overflow-hidden ${horizontal ? "sm:w-2/5 sm:shrink-0" : ""}`}
       >
         {post.cover_image ? (
           <img
@@ -65,18 +71,18 @@ export default function PostCard({ post, variant = 'default' }) {
             alt={post.title}
             loading="lazy"
             className={`w-full object-cover transition-transform duration-500 group-hover:scale-105 ${
-              horizontal ? 'h-48 sm:h-full' : 'h-48'
+              horizontal ? "h-48 sm:h-full" : "h-48"
             }`}
           />
         ) : (
           <div
-            className={`flex w-full items-center justify-center ${horizontal ? 'h-48 sm:h-full' : 'h-48'}`}
+            className={`flex w-full items-center justify-center ${horizontal ? "h-48 sm:h-full" : "h-48"}`}
             style={{
-              background: `linear-gradient(135deg, ${post.category_color || 'var(--c-primary)'}33, var(--c-surface))`,
+              background: `linear-gradient(135deg, ${post.category_color || "var(--c-primary)"}33, var(--c-surface))`,
             }}
           >
             <span className="font-heading text-3xl font-black opacity-30">
-              {(post.title || '?').charAt(0).toUpperCase()}
+              {(post.title || "?").charAt(0).toUpperCase()}
             </span>
           </div>
         )}
@@ -89,8 +95,8 @@ export default function PostCard({ post, variant = 'default' }) {
               to={paths.category(post.category_slug)}
               className="chip no-underline"
               style={{
-                background: `${post.category_color || 'var(--c-primary)'}22`,
-                color: post.category_color || 'var(--c-primary)',
+                background: `${post.category_color || "var(--c-primary)"}22`,
+                color: post.category_color || "var(--c-primary)",
               }}
             >
               {post.category_name}
@@ -100,20 +106,24 @@ export default function PostCard({ post, variant = 'default' }) {
         </div>
 
         <h3 className="mt-3 text-lg font-bold leading-snug">
-          <Link to={href} className="no-underline transition group-hover:opacity-80">
+          <Link
+            to={href}
+            className="no-underline transition group-hover:opacity-80"
+          >
             {post.title}
           </Link>
         </h3>
 
         <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed opacity-75">
-          {post.excerpt || ''}
+          {post.excerpt || ""}
         </p>
 
         <div className="mt-4 flex items-center justify-between text-xs opacity-60">
           <span className="inline-flex items-center gap-1">
-            <Clock className="h-3 w-3" /> {readingTime(post.content || post.excerpt)} min de leitura
+            <Clock className="h-3 w-3" />{" "}
+            {readingTime(post.content || post.excerpt)} min de leitura
           </span>
-          {typeof post.views === 'number' && post.views > 0 && (
+          {typeof post.views === "number" && post.views > 0 && (
             <span className="inline-flex items-center gap-1">
               <Eye className="h-3 w-3" /> {post.views}
             </span>
@@ -127,7 +137,7 @@ export default function PostCard({ post, variant = 'default' }) {
 /** Destaque grande usado pelos templates "magazine" e "classic". */
 export function FeaturedPost({ post }) {
   const { blog } = useBlog();
-  const paths = blogPaths(blog?.slug || '');
+  const paths = blogPaths(blog?.slug || "");
   if (!post) return null;
 
   return (
@@ -143,7 +153,7 @@ export function FeaturedPost({ post }) {
           <div
             className="h-[320px] w-full sm:h-[420px]"
             style={{
-              background: `linear-gradient(135deg, ${post.category_color || 'var(--c-primary)'}, var(--c-secondary))`,
+              background: `linear-gradient(135deg, ${post.category_color || "var(--c-primary)"}, var(--c-secondary))`,
             }}
           />
         )}
@@ -153,14 +163,18 @@ export function FeaturedPost({ post }) {
             {post.category_name && (
               <span
                 className="chip"
-                style={{ background: post.category_color || 'var(--c-primary)', color: '#fff' }}
+                style={{
+                  background: post.category_color || "var(--c-primary)",
+                  color: "#fff",
+                }}
               >
                 {post.category_name}
               </span>
             )}
             <span>{formatDate(post.published_at || post.created_at)}</span>
             <span className="inline-flex items-center gap-1">
-              <Clock className="h-3 w-3" /> {readingTime(post.content || post.excerpt)} min
+              <Clock className="h-3 w-3" />{" "}
+              {readingTime(post.content || post.excerpt)} min
             </span>
           </div>
 
@@ -175,7 +189,7 @@ export function FeaturedPost({ post }) {
           )}
 
           <span className="mt-5 inline-flex w-fit items-center gap-2 rounded-theme bg-white px-4 py-2.5 text-sm font-bold text-gray-900">
-            Ler publicacao <ArrowRight className="h-4 w-4" />
+            Ler publicação <ArrowRight className="h-4 w-4" />
           </span>
         </div>
       </Link>
