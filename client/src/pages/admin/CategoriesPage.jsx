@@ -1,29 +1,34 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Pencil, Plus, Tags, Trash2, X } from 'lucide-react';
-import { apiAdminCategories } from '../../lib/api.js';
-import { blogPaths } from '../../lib/urls.js';
-import { useBlog } from '../../context/BlogContext.jsx';
-import { setPageTitle } from '../../lib/theme.js';
-import ColorField from '../../components/ui/ColorField.jsx';
-import { Alert, EmptyState, FullPageLoader, Spinner } from '../../components/ui/Feedback.jsx';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Pencil, Plus, Tags, Trash2, X } from "lucide-react";
+import { apiAdminCategories } from "../../lib/api.js";
+import { blogPaths } from "../../lib/urls.js";
+import { useBlog } from "../../context/BlogContext.jsx";
+import { setPageTitle } from "../../lib/theme.js";
+import ColorField from "../../components/ui/ColorField.jsx";
+import {
+  Alert,
+  EmptyState,
+  FullPageLoader,
+  Spinner,
+} from "../../components/ui/Feedback.jsx";
 
-const EMPTY = { name: '', slug: '', description: '', color: '#6366f1' };
+const EMPTY = { name: "", slug: "", description: "", color: "#6366f1" };
 
 function slugify(text) {
-  return String(text || '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
+  return String(text || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/[^a-z0-9\s-]/g, "")
     .trim()
-    .replace(/\s+/g, '-');
+    .replace(/\s+/g, "-");
 }
 
 export default function CategoriesPage() {
   const { blog } = useBlog();
   const blogId = blog?.id;
-  const publicPaths = blogPaths(blog?.slug || '');
+  const publicPaths = blogPaths(blog?.slug || "");
 
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -47,7 +52,7 @@ export default function CategoriesPage() {
   }
 
   useEffect(() => {
-    setPageTitle('Categorias');
+    setPageTitle("Categorias");
     load();
   }, [blogId]);
 
@@ -62,7 +67,8 @@ export default function CategoriesPage() {
         description: editing.description,
         color: editing.color,
       };
-      if (editing.id) await apiAdminCategories.update(blogId, editing.id, payload);
+      if (editing.id)
+        await apiAdminCategories.update(blogId, editing.id, payload);
       else await apiAdminCategories.create(blogId, payload);
       setEditing(null);
       await load();
@@ -74,7 +80,12 @@ export default function CategoriesPage() {
   }
 
   async function remove(category) {
-    if (!window.confirm(`Excluir a categoria "${category.name}"? Os posts ficarao sem categoria.`)) return;
+    if (
+      !window.confirm(
+        `Excluir a categoria "${category.name}"? Os posts ficarao sem categoria.`,
+      )
+    )
+      return;
     setBusyId(category.id);
     try {
       await apiAdminCategories.remove(blogId, category.id);
@@ -91,7 +102,9 @@ export default function CategoriesPage() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="font-heading text-2xl font-black">Categorias</h1>
-          <p className="mt-1 text-sm opacity-70">Organize as publicacoes do blog.</p>
+          <p className="mt-1 text-sm opacity-70">
+            Organize as publicações do blog.
+          </p>
         </div>
         <button
           type="button"
@@ -110,7 +123,7 @@ export default function CategoriesPage() {
         <EmptyState
           icon={Tags}
           title="Nenhuma categoria"
-          description="Crie categorias para organizar suas publicacoes."
+          description="Crie categorias para organizar suas publicações."
         />
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -139,7 +152,11 @@ export default function CategoriesPage() {
                     disabled={busyId === cat.id}
                     title="Excluir"
                   >
-                    {busyId === cat.id ? <Spinner className="h-3.5 w-3.5" /> : <Trash2 className="h-3.5 w-3.5" />}
+                    {busyId === cat.id ? (
+                      <Spinner className="h-3.5 w-3.5" />
+                    ) : (
+                      <Trash2 className="h-3.5 w-3.5" />
+                    )}
                   </button>
                 </div>
               </div>
@@ -149,11 +166,14 @@ export default function CategoriesPage() {
                 <p className="font-mono text-xs opacity-50">/{cat.slug}</p>
               </div>
 
-              {cat.description && <p className="text-sm opacity-70">{cat.description}</p>}
+              {cat.description && (
+                <p className="text-sm opacity-70">{cat.description}</p>
+              )}
 
               <div className="mt-auto flex items-center justify-between text-xs opacity-60">
                 <span>
-                  {cat.post_count} {cat.post_count === 1 ? 'publicacao' : 'publicacoes'}
+                  {cat.post_count}{" "}
+                  {cat.post_count === 1 ? "publicacao" : "publicacoes"}
                 </span>
                 <Link
                   to={publicPaths.category(cat.slug)}
@@ -173,11 +193,11 @@ export default function CategoriesPage() {
           <form
             onSubmit={submit}
             className="card max-h-full w-full max-w-md space-y-4 overflow-y-auto p-6"
-            style={{ background: 'var(--c-bg)' }}
+            style={{ background: "var(--c-bg)" }}
           >
             <div className="flex items-center justify-between">
               <h3 className="font-heading text-lg font-bold">
-                {editing.id ? 'Editar categoria' : 'Nova categoria'}
+                {editing.id ? "Editar categoria" : "Nova categoria"}
               </h3>
               <button
                 type="button"
@@ -206,9 +226,14 @@ export default function CategoriesPage() {
               <label className="label">Slug (URL)</label>
               <input
                 className="input font-mono text-xs"
-                placeholder={slugify(editing.name) || 'nome-da-categoria'}
-                value={editing.slug || ''}
-                onChange={(e) => setEditing((prev) => ({ ...prev, slug: slugify(e.target.value) }))}
+                placeholder={slugify(editing.name) || "nome-da-categoria"}
+                value={editing.slug || ""}
+                onChange={(e) =>
+                  setEditing((prev) => ({
+                    ...prev,
+                    slug: slugify(e.target.value),
+                  }))
+                }
               />
             </div>
 
@@ -217,8 +242,13 @@ export default function CategoriesPage() {
               <textarea
                 className="input min-h-[70px] resize-y"
                 maxLength={300}
-                value={editing.description || ''}
-                onChange={(e) => setEditing((prev) => ({ ...prev, description: e.target.value }))}
+                value={editing.description || ""}
+                onChange={(e) =>
+                  setEditing((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
               />
             </div>
 
@@ -229,10 +259,18 @@ export default function CategoriesPage() {
             />
 
             <div className="flex justify-end gap-2 pt-2">
-              <button type="button" className="btn btn-ghost" onClick={() => setEditing(null)}>
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={() => setEditing(null)}
+              >
                 Cancelar
               </button>
-              <button type="submit" className="btn btn-primary" disabled={saving}>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={saving}
+              >
                 {saving ? <Spinner className="h-4 w-4" /> : null}
                 Salvar
               </button>

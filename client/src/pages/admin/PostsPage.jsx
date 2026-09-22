@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   CheckCircle2,
   Eye,
@@ -9,20 +9,25 @@ import {
   Search,
   Trash2,
   Undo2,
-} from 'lucide-react';
-import { apiAdminCategories, apiAdminPosts } from '../../lib/api.js';
-import { adminPaths, blogPaths } from '../../lib/urls.js';
-import { useBlog } from '../../context/BlogContext.jsx';
-import { formatDate } from '../../lib/markdown.js';
-import { setPageTitle } from '../../lib/theme.js';
-import { Alert, EmptyState, FullPageLoader, Spinner } from '../../components/ui/Feedback.jsx';
-import Pagination from '../../components/public/Pagination.jsx';
+} from "lucide-react";
+import { apiAdminCategories, apiAdminPosts } from "../../lib/api.js";
+import { adminPaths, blogPaths } from "../../lib/urls.js";
+import { useBlog } from "../../context/BlogContext.jsx";
+import { formatDate } from "../../lib/markdown.js";
+import { setPageTitle } from "../../lib/theme.js";
+import {
+  Alert,
+  EmptyState,
+  FullPageLoader,
+  Spinner,
+} from "../../components/ui/Feedback.jsx";
+import Pagination from "../../components/public/Pagination.jsx";
 
 export default function PostsPage() {
   const { blog } = useBlog();
   const blogId = blog?.id;
   const paths = adminPaths(blogId || 0);
-  const publicPaths = blogPaths(blog?.slug || '');
+  const publicPaths = blogPaths(blog?.slug || "");
 
   const [posts, setPosts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -30,7 +35,12 @@ export default function PostsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [busyId, setBusyId] = useState(null);
-  const [filters, setFilters] = useState({ status: 'all', category: '', search: '', page: 1 });
+  const [filters, setFilters] = useState({
+    status: "all",
+    category: "",
+    search: "",
+    page: 1,
+  });
   const [confirmDelete, setConfirmDelete] = useState(null);
 
   const load = useCallback(async () => {
@@ -39,7 +49,7 @@ export default function PostsPage() {
     setError(null);
     try {
       const params = { page: filters.page, limit: 12 };
-      if (filters.status !== 'all') params.status = filters.status;
+      if (filters.status !== "all") params.status = filters.status;
       if (filters.category) params.category = filters.category;
       if (filters.search) params.search = filters.search;
 
@@ -55,7 +65,7 @@ export default function PostsPage() {
 
   useEffect(() => {
     if (!blogId) return;
-    setPageTitle('Publicacoes');
+    setPageTitle("Publicações");
     apiAdminCategories
       .list(blogId)
       .then((data) => setCategories(data?.categories || []))
@@ -70,7 +80,11 @@ export default function PostsPage() {
   async function toggleStatus(post) {
     setBusyId(post.id);
     try {
-      await apiAdminPosts.setStatus(blogId, post.id, post.status === 'published' ? 'draft' : 'published');
+      await apiAdminPosts.setStatus(
+        blogId,
+        post.id,
+        post.status === "published" ? "draft" : "published",
+      );
       await load();
     } catch (err) {
       setError(err.message);
@@ -96,9 +110,9 @@ export default function PostsPage() {
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-heading text-2xl font-black">Publicacoes</h1>
+          <h1 className="font-heading text-2xl font-black">Publicações</h1>
           <p className="mt-1 text-sm opacity-70">
-            {pagination ? `${pagination.total} no total` : 'Carregando...'}
+            {pagination ? `${pagination.total} no total` : "Carregando..."}
           </p>
         </div>
         <Link to={paths.newPost} className="btn btn-primary">
@@ -116,13 +130,17 @@ export default function PostsPage() {
               className="input pl-9"
               placeholder="Buscar por titulo..."
               value={filters.search}
-              onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value, page: 1 }))}
+              onChange={(e) =>
+                setFilters((f) => ({ ...f, search: e.target.value, page: 1 }))
+              }
             />
           </div>
           <select
             className="input"
             value={filters.status}
-            onChange={(e) => setFilters((f) => ({ ...f, status: e.target.value, page: 1 }))}
+            onChange={(e) =>
+              setFilters((f) => ({ ...f, status: e.target.value, page: 1 }))
+            }
           >
             <option value="all">Todos os status</option>
             <option value="published">Publicados</option>
@@ -131,7 +149,9 @@ export default function PostsPage() {
           <select
             className="input"
             value={filters.category}
-            onChange={(e) => setFilters((f) => ({ ...f, category: e.target.value, page: 1 }))}
+            onChange={(e) =>
+              setFilters((f) => ({ ...f, category: e.target.value, page: 1 }))
+            }
           >
             <option value="">Todas as categorias</option>
             {categories.map((cat) => (
@@ -144,7 +164,7 @@ export default function PostsPage() {
       </div>
 
       {loading ? (
-        <FullPageLoader label="Carregando publicacoes..." />
+        <FullPageLoader label="Carregando publicações..." />
       ) : posts.length === 0 ? (
         <EmptyState
           icon={FileText}
@@ -160,7 +180,7 @@ export default function PostsPage() {
         <div className="card overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[760px] text-sm">
-              <thead style={{ background: 'var(--c-surface)' }}>
+              <thead style={{ background: "var(--c-surface)" }}>
                 <tr className="text-left text-xs uppercase tracking-wider opacity-70">
                   <th className="px-4 py-3 font-bold">Titulo</th>
                   <th className="px-4 py-3 font-bold">Categoria</th>
@@ -170,9 +190,15 @@ export default function PostsPage() {
                   <th className="px-4 py-3 text-right font-bold">Acoes</th>
                 </tr>
               </thead>
-              <tbody className="divide-y" style={{ borderColor: 'var(--c-border)' }}>
+              <tbody
+                className="divide-y"
+                style={{ borderColor: "var(--c-border)" }}
+              >
                 {posts.map((post) => (
-                  <tr key={post.id} className="transition hover:bg-black/[0.02]">
+                  <tr
+                    key={post.id}
+                    className="transition hover:bg-black/[0.02]"
+                  >
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         {post.cover_image ? (
@@ -184,7 +210,7 @@ export default function PostsPage() {
                         ) : (
                           <span
                             className="flex h-9 w-12 shrink-0 items-center justify-center rounded text-xs font-bold opacity-50"
-                            style={{ background: 'var(--c-surface)' }}
+                            style={{ background: "var(--c-surface)" }}
                           >
                             <FileText className="h-3.5 w-3.5" />
                           </span>
@@ -197,7 +223,10 @@ export default function PostsPage() {
                             {post.title}
                           </Link>
                           {post.featured && (
-                            <span className="text-[11px] font-bold" style={{ color: 'var(--c-accent)' }}>
+                            <span
+                              className="text-[11px] font-bold"
+                              style={{ color: "var(--c-accent)" }}
+                            >
                               ★ Destaque
                             </span>
                           )}
@@ -223,12 +252,12 @@ export default function PostsPage() {
                       <span
                         className="chip text-[11px]"
                         style={
-                          post.status === 'published'
-                            ? { background: '#10b98122', color: '#059669' }
-                            : { background: '#f59e0b22', color: '#b45309' }
+                          post.status === "published"
+                            ? { background: "#10b98122", color: "#059669" }
+                            : { background: "#f59e0b22", color: "#b45309" }
                         }
                       >
-                        {post.status === 'published' ? 'Publicado' : 'Rascunho'}
+                        {post.status === "published" ? "Publicado" : "Rascunho"}
                       </span>
                     </td>
                     <td className="px-4 py-3 opacity-70">{post.views}</td>
@@ -251,16 +280,20 @@ export default function PostsPage() {
                             <button
                               type="button"
                               className="btn btn-ghost h-8 w-8 !px-0"
-                              title={post.status === 'published' ? 'Despublicar' : 'Publicar'}
+                              title={
+                                post.status === "published"
+                                  ? "Despublicar"
+                                  : "Publicar"
+                              }
                               onClick={() => toggleStatus(post)}
                             >
-                              {post.status === 'published' ? (
+                              {post.status === "published" ? (
                                 <Undo2 className="h-3.5 w-3.5" />
                               ) : (
                                 <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
                               )}
                             </button>
-                            {post.status === 'published' && (
+                            {post.status === "published" && (
                               <a
                                 href={publicPaths.post(post.slug)}
                                 target="_blank"
@@ -298,14 +331,24 @@ export default function PostsPage() {
 
       {confirmDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-          <div className="card w-full max-w-sm p-6" style={{ background: 'var(--c-bg)' }}>
-            <h3 className="font-heading text-lg font-bold">Excluir publicacao</h3>
+          <div
+            className="card w-full max-w-sm p-6"
+            style={{ background: "var(--c-bg)" }}
+          >
+            <h3 className="font-heading text-lg font-bold">
+              Excluir publicacao
+            </h3>
             <p className="mt-2 text-sm opacity-75">
-              Tem certeza que deseja excluir <strong>{confirmDelete.title}</strong>? Esta acao nao
-              pode ser desfeita.
+              Tem certeza que deseja excluir{" "}
+              <strong>{confirmDelete.title}</strong>? Esta acao nao pode ser
+              desfeita.
             </p>
             <div className="mt-5 flex justify-end gap-2">
-              <button type="button" className="btn btn-ghost" onClick={() => setConfirmDelete(null)}>
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={() => setConfirmDelete(null)}
+              >
                 Cancelar
               </button>
               <button
@@ -314,7 +357,11 @@ export default function PostsPage() {
                 onClick={() => remove(confirmDelete.id)}
                 disabled={busyId === confirmDelete.id}
               >
-                {busyId === confirmDelete.id ? <Spinner className="h-4 w-4" /> : <Trash2 className="h-4 w-4" />}
+                {busyId === confirmDelete.id ? (
+                  <Spinner className="h-4 w-4" />
+                ) : (
+                  <Trash2 className="h-4 w-4" />
+                )}
                 Excluir
               </button>
             </div>

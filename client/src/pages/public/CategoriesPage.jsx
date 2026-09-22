@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { FolderOpen, Home } from 'lucide-react';
-import { apiBlogs } from '../../lib/api.js';
-import { useBlog } from '../../context/BlogContext.jsx';
-import { blogPaths } from '../../lib/urls.js';
-import { setPageTitle } from '../../lib/theme.js';
-import PostCard from '../../components/public/PostCard.jsx';
-import Pagination from '../../components/public/Pagination.jsx';
-import { EmptyState, FullPageLoader } from '../../components/ui/Feedback.jsx';
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { FolderOpen, Home } from "lucide-react";
+import { apiBlogs } from "../../lib/api.js";
+import { useBlog } from "../../context/BlogContext.jsx";
+import { blogPaths } from "../../lib/urls.js";
+import { setPageTitle } from "../../lib/theme.js";
+import PostCard from "../../components/public/PostCard.jsx";
+import Pagination from "../../components/public/Pagination.jsx";
+import { EmptyState, FullPageLoader } from "../../components/ui/Feedback.jsx";
 
 export function CategoriesPage() {
   const { blog } = useBlog();
-  const slug = blog?.slug || '';
+  const slug = blog?.slug || "";
   const paths = blogPaths(slug);
 
   const [categories, setCategories] = useState([]);
@@ -19,7 +19,7 @@ export function CategoriesPage() {
 
   useEffect(() => {
     if (!slug) return undefined;
-    setPageTitle('Categorias');
+    setPageTitle("Categorias");
     apiBlogs
       .categories(slug)
       .then((data) => setCategories(data?.categories || []))
@@ -33,7 +33,7 @@ export function CategoriesPage() {
   return (
     <div className="mx-auto max-w-content px-4 py-14 sm:px-6">
       <h1 className="font-heading text-3xl font-black">Categorias</h1>
-      <p className="mt-2 opacity-70">Explore as publicacoes por assunto.</p>
+      <p className="mt-2 opacity-70">Explore as publicações por assunto.</p>
 
       {categories.length === 0 ? (
         <div className="mt-8">
@@ -54,9 +54,12 @@ export function CategoriesPage() {
                 {cat.name.charAt(0).toUpperCase()}
               </span>
               <h2 className="font-heading text-lg font-bold">{cat.name}</h2>
-              {cat.description && <p className="text-sm opacity-70">{cat.description}</p>}
+              {cat.description && (
+                <p className="text-sm opacity-70">{cat.description}</p>
+              )}
               <span className="mt-auto text-xs font-semibold opacity-60">
-                {cat.post_count} {cat.post_count === 1 ? 'publicacao' : 'publicacoes'}
+                {cat.post_count}{" "}
+                {cat.post_count === 1 ? "publicação" : "publicações"}
               </span>
             </Link>
           ))}
@@ -69,7 +72,7 @@ export function CategoriesPage() {
 export function CategoryPostsPage() {
   const { slug } = useParams();
   const { blog } = useBlog();
-  const blogSlug = blog?.slug || '';
+  const blogSlug = blog?.slug || "";
   const paths = blogPaths(blogSlug);
 
   const [data, setData] = useState({ posts: [], pagination: null });
@@ -85,7 +88,7 @@ export function CategoryPostsPage() {
       .then((res) => {
         const found = (res?.categories || []).find((c) => c.slug === slug);
         setCategory(found || null);
-        setPageTitle(found ? found.name : 'Categoria');
+        setPageTitle(found ? found.name : "Categoria");
       })
       .catch(() => {});
     return undefined;
@@ -111,12 +114,16 @@ export function CategoryPostsPage() {
     <div className="mx-auto max-w-content px-4 py-14 sm:px-6">
       <span
         className="text-xs font-bold uppercase tracking-wider"
-        style={{ color: category?.color || 'var(--c-primary)' }}
+        style={{ color: category?.color || "var(--c-primary)" }}
       >
         Categoria
       </span>
-      <h1 className="mt-1 font-heading text-3xl font-black">{category?.name || slug}</h1>
-      {category?.description && <p className="mt-2 max-w-2xl opacity-70">{category.description}</p>}
+      <h1 className="mt-1 font-heading text-3xl font-black">
+        {category?.name || slug}
+      </h1>
+      {category?.description && (
+        <p className="mt-2 max-w-2xl opacity-70">{category.description}</p>
+      )}
 
       <div className="mt-10">
         {loading ? (
@@ -124,7 +131,7 @@ export function CategoryPostsPage() {
         ) : data.posts.length === 0 ? (
           <EmptyState
             icon={FolderOpen}
-            title="Nenhuma publicacao nesta categoria"
+            title="Nenhuma publicação nesta categoria"
             action={
               <Link to={paths.home} className="btn btn-primary">
                 Ver todas

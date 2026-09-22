@@ -1,4 +1,4 @@
-import { useSettings } from '../../context/SettingsContext.jsx';
+import { useSettings } from "../../context/SettingsContext.jsx";
 
 export default function Banner({ postCount }) {
   const { settings } = useSettings();
@@ -17,8 +17,15 @@ export default function Banner({ postCount }) {
     <section className="relative overflow-hidden">
       {hasImage ? (
         <div className="absolute inset-0">
-          <img src={settings.banner_url} alt="" className="h-full w-full object-cover" />
-          <div className="absolute inset-0" style={{ background: `rgba(0,0,0,${overlay})` }} />
+          <img
+            src={settings.banner_url}
+            alt=""
+            className="h-full w-full object-cover"
+          />
+          <div
+            className="absolute inset-0"
+            style={{ background: `rgba(0,0,0,${overlay})` }}
+          />
         </div>
       ) : (
         <div
@@ -32,7 +39,7 @@ export default function Banner({ postCount }) {
       <div className="relative mx-auto max-w-content px-4 py-16 text-center sm:px-6 sm:py-24">
         <h1
           className="mx-auto max-w-3xl font-heading text-3xl font-black leading-tight text-white drop-shadow-sm sm:text-5xl"
-          style={hasImage ? undefined : { color: '#fff' }}
+          style={hasImage ? undefined : { color: "#fff" }}
         >
           {title}
         </h1>
@@ -49,9 +56,9 @@ export default function Banner({ postCount }) {
           </p>
         )}
 
-        {typeof postCount === 'number' && (
+        {typeof postCount === "number" && (
           <p className="mt-6 inline-flex items-center rounded-full bg-white/15 px-4 py-1.5 text-xs font-semibold text-white backdrop-blur">
-            {postCount} {postCount === 1 ? 'publicacao' : 'publicacoes'}
+            {postCount} {postCount === 1 ? "publicação" : "publicações"}
           </p>
         )}
       </div>

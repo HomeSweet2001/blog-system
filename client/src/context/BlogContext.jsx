@@ -1,6 +1,13 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { apiBlogs, setLastBlogId } from '../lib/api.js';
-import { useSettings } from './SettingsContext.jsx';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { apiBlogs, setLastBlogId } from "../lib/api.js";
+import { useSettings } from "./SettingsContext.jsx";
 
 const BlogContext = createContext(null);
 
@@ -19,7 +26,7 @@ const EMPTY = {
  *
  * `identifier` nulo (ex.: lista de blogs no painel) nao dispara busca.
  */
-export function BlogProvider({ mode = 'slug', identifier = null, children }) {
+export function BlogProvider({ mode = "slug", identifier = null, children }) {
   const { setSettings } = useSettings();
 
   const [blog, setBlog] = useState(null);
@@ -29,7 +36,7 @@ export function BlogProvider({ mode = 'slug', identifier = null, children }) {
   const [error, setError] = useState(null);
 
   const load = useCallback(async () => {
-    if (identifier === null || identifier === undefined || identifier === '') {
+    if (identifier === null || identifier === undefined || identifier === "") {
       setBlog(null);
       setLocalSettings(null);
       setStorage(null);
@@ -43,19 +50,21 @@ export function BlogProvider({ mode = 'slug', identifier = null, children }) {
 
     try {
       const data =
-        mode === 'slug' ? await apiBlogs.getPublic(identifier) : await apiBlogs.get(identifier);
+        mode === "slug"
+          ? await apiBlogs.getPublic(identifier)
+          : await apiBlogs.get(identifier);
 
       setBlog(data.blog);
       setLocalSettings(data.settings);
       setStorage(data.storage || null);
       setSettings(data.settings); // aplica cores/fontes/template do blog no tema global
 
-      if (mode !== 'slug' && data.blog?.id) setLastBlogId(data.blog.id);
+      if (mode !== "slug" && data.blog?.id) setLastBlogId(data.blog.id);
 
       return data;
     } catch (err) {
       setBlog(null);
-      setError(err.status === 404 ? 'Blog nao encontrado.' : err.message);
+      setError(err.status === 404 ? "Blog não encontrado." : err.message);
       return null;
     } finally {
       setLoading(false);
@@ -68,7 +77,7 @@ export function BlogProvider({ mode = 'slug', identifier = null, children }) {
 
   const value = useMemo(
     () => ({ blog, settings, storage, loading, error, refresh: load }),
-    [blog, settings, storage, loading, error, load]
+    [blog, settings, storage, loading, error, load],
   );
 
   return <BlogContext.Provider value={value}>{children}</BlogContext.Provider>;

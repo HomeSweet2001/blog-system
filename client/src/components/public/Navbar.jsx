@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { Lock, Menu, Search, X } from 'lucide-react';
-import { useSettings } from '../../context/SettingsContext.jsx';
-import { useBlog } from '../../context/BlogContext.jsx';
-import { blogPaths, resolveNavUrl } from '../../lib/urls.js';
-import BlogLogo from './BlogLogo.jsx';
+import { useEffect, useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Lock, Menu, Search, X } from "lucide-react";
+import { useSettings } from "../../context/SettingsContext.jsx";
+import { useBlog } from "../../context/BlogContext.jsx";
+import { blogPaths, resolveNavUrl } from "../../lib/urls.js";
+import BlogLogo from "./BlogLogo.jsx";
 
 export default function Navbar() {
   const { settings } = useSettings();
@@ -12,18 +12,18 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const [term, setTerm] = useState('');
+  const [term, setTerm] = useState("");
   const [scrolled, setScrolled] = useState(false);
 
-  const slug = blog?.slug || '';
+  const slug = blog?.slug || "";
   const paths = blogPaths(slug);
   const links = Array.isArray(settings.navbar) ? settings.navbar : [];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   function submitSearch(e) {
@@ -36,20 +36,20 @@ export default function Navbar() {
 
   const linkClass = ({ isActive }) =>
     `rounded-theme px-3 py-2 text-sm font-semibold no-underline transition ${
-      isActive ? 'opacity-100' : 'opacity-70 hover:opacity-100'
+      isActive ? "opacity-100" : "opacity-70 hover:opacity-100"
     }`;
 
   const linkStyle = ({ isActive }) =>
-    isActive ? { color: 'var(--c-primary)' } : undefined;
+    isActive ? { color: "var(--c-primary)" } : undefined;
 
   return (
     <header
       className={`sticky top-0 z-40 border-b backdrop-blur transition-shadow ${
-        scrolled ? 'shadow-sm' : ''
+        scrolled ? "shadow-sm" : ""
       }`}
       style={{
-        background: 'color-mix(in srgb, var(--c-bg) 88%, transparent)',
-        borderColor: 'var(--c-border)',
+        background: "color-mix(in srgb, var(--c-bg) 88%, transparent)",
+        borderColor: "var(--c-border)",
       }}
     >
       <div className="mx-auto flex h-16 max-w-content items-center justify-between gap-4 px-4 sm:px-6">
@@ -64,7 +64,7 @@ export default function Navbar() {
                 <a
                   key={`${item.label}-${item.url}`}
                   href={to}
-                  target={item.openInNewTab ? '_blank' : undefined}
+                  target={item.openInNewTab ? "_blank" : undefined}
                   rel="noreferrer"
                   className="rounded-theme px-3 py-2 text-sm font-semibold no-underline opacity-70 transition hover:opacity-100"
                 >
@@ -78,8 +78,8 @@ export default function Navbar() {
                 key={`${item.label}-${item.url}`}
                 to={to}
                 end={to === paths.home}
-                target={item.openInNewTab ? '_blank' : undefined}
-                rel={item.openInNewTab ? 'noreferrer' : undefined}
+                target={item.openInNewTab ? "_blank" : undefined}
+                rel={item.openInNewTab ? "noreferrer" : undefined}
                 className={linkClass}
                 style={linkStyle}
               >
@@ -101,7 +101,7 @@ export default function Navbar() {
           <Link
             to="/admin"
             className="btn btn-ghost hidden h-10 !px-3 sm:inline-flex"
-            title="Area administrativa"
+            title="Área administrativa"
           >
             <Lock className="h-4 w-4" />
             <span className="hidden lg:inline">Admin</span>
@@ -118,8 +118,14 @@ export default function Navbar() {
       </div>
 
       {searchOpen && (
-        <div className="border-t px-4 py-3 sm:px-6" style={{ borderColor: 'var(--c-border)' }}>
-          <form onSubmit={submitSearch} className="mx-auto flex max-w-content gap-2">
+        <div
+          className="border-t px-4 py-3 sm:px-6"
+          style={{ borderColor: "var(--c-border)" }}
+        >
+          <form
+            onSubmit={submitSearch}
+            className="mx-auto flex max-w-content gap-2"
+          >
             <input
               autoFocus
               className="input"
@@ -137,7 +143,7 @@ export default function Navbar() {
       {open && (
         <nav
           className="border-t px-4 py-3 md:hidden"
-          style={{ borderColor: 'var(--c-border)', background: 'var(--c-bg)' }}
+          style={{ borderColor: "var(--c-border)", background: "var(--c-bg)" }}
         >
           <div className="flex flex-col">
             {links.map((item) => {
@@ -169,7 +175,7 @@ export default function Navbar() {
               onClick={() => setOpen(false)}
               className="mt-1 rounded-theme px-3 py-3 text-sm font-semibold no-underline opacity-80"
             >
-              Area administrativa
+              Área administrativa
             </Link>
           </div>
         </nav>

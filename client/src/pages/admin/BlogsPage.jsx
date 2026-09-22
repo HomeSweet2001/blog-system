@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Eye,
   Eye as EyeIcon,
@@ -11,22 +11,27 @@ import {
   Tags,
   Trash2,
   X,
-} from 'lucide-react';
-import { apiBlogs } from '../../lib/api.js';
-import { adminPaths, blogPaths } from '../../lib/urls.js';
-import { setPageTitle } from '../../lib/theme.js';
-import { Alert, EmptyState, FullPageLoader, Spinner } from '../../components/ui/Feedback.jsx';
+} from "lucide-react";
+import { apiBlogs } from "../../lib/api.js";
+import { adminPaths, blogPaths } from "../../lib/urls.js";
+import { setPageTitle } from "../../lib/theme.js";
+import {
+  Alert,
+  EmptyState,
+  FullPageLoader,
+  Spinner,
+} from "../../components/ui/Feedback.jsx";
 
-const EMPTY_FORM = { name: '', slug: '' };
+const EMPTY_FORM = { name: "", slug: "" };
 
 function slugPreview(name) {
-  return String(name || '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
+  return String(name || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/[^a-z0-9\s-]/g, "")
     .trim()
-    .replace(/\s+/g, '-');
+    .replace(/\s+/g, "-");
 }
 
 /* -------------------------- modal de criacao de blog ----------------------- */
@@ -58,11 +63,15 @@ function CreateBlogModal({ onClose, onCreated }) {
       <form
         onSubmit={submit}
         className="card max-h-full w-full max-w-md space-y-4 overflow-y-auto p-6"
-        style={{ background: 'var(--c-bg)' }}
+        style={{ background: "var(--c-bg)" }}
       >
         <div className="flex items-center justify-between">
           <h2 className="font-heading text-lg font-bold">Criar novo blog</h2>
-          <button type="button" className="btn btn-ghost h-8 w-8 !px-0" onClick={onClose}>
+          <button
+            type="button"
+            className="btn btn-ghost h-8 w-8 !px-0"
+            onClick={onClose}
+          >
             <X className="h-4 w-4" />
           </button>
         </div>
@@ -89,25 +98,33 @@ function CreateBlogModal({ onClose, onCreated }) {
           <input
             id="blog-slug"
             className="input font-mono text-xs"
-            placeholder={slugPreview(form.name) || 'receitas-da-vovo'}
+            placeholder={slugPreview(form.name) || "receitas-da-vovo"}
             value={form.slug}
-            onChange={(e) => setForm((f) => ({ ...f, slug: slugPreview(e.target.value) }))}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, slug: slugPreview(e.target.value) }))
+            }
           />
           <p className="mt-1.5 text-xs opacity-60">
-            O blog ficara em <code>/b/{form.slug || slugPreview(form.name) || 'nome-do-blog'}</code>
+            O blog ficara em{" "}
+            <code>
+              /b/{form.slug || slugPreview(form.name) || "nome-do-blog"}
+            </code>
           </p>
         </div>
 
         <div
           className="rounded-theme border px-3 py-3 text-xs opacity-75"
-          style={{ borderColor: 'var(--c-border)', background: 'var(--c-surface)' }}
+          style={{
+            borderColor: "var(--c-border)",
+            background: "var(--c-surface)",
+          }}
         >
           <span className="inline-flex items-center gap-1.5 font-semibold">
             <FolderTree className="h-3.5 w-3.5" /> Pastas de imagem
           </span>
           <p className="mt-1">
-            Todas as imagens deste blog serao guardadas em uma pasta exclusiva no Cloudinary, criada
-            automaticamente.
+            Todas as imagens deste blog serao guardadas em uma pasta exclusiva
+            no Cloudinary, criada automaticamente.
           </p>
         </div>
 
@@ -117,8 +134,16 @@ function CreateBlogModal({ onClose, onCreated }) {
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancelar
           </button>
-          <button type="submit" className="btn btn-primary" disabled={saving || !form.name.trim()}>
-            {saving ? <Spinner className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={saving || !form.name.trim()}
+          >
+            {saving ? (
+              <Spinner className="h-4 w-4" />
+            ) : (
+              <Plus className="h-4 w-4" />
+            )}
             Criar blog
           </button>
         </div>
@@ -129,7 +154,7 @@ function CreateBlogModal({ onClose, onCreated }) {
 
 /* ------------------------------ card de blog ------------------------------- */
 function BlogCard({ blog, onDelete }) {
-  const accent = blog.primary_color || '#6366f1';
+  const accent = blog.primary_color || "#6366f1";
   const paths = adminPaths(blog.id);
 
   return (
@@ -140,10 +165,12 @@ function BlogCard({ blog, onDelete }) {
             className="flex h-11 w-11 shrink-0 items-center justify-center rounded-theme text-lg font-black text-white"
             style={{ background: accent }}
           >
-            {(blog.name || 'B').charAt(0).toUpperCase()}
+            {(blog.name || "B").charAt(0).toUpperCase()}
           </span>
           <div className="min-w-0">
-            <h2 className="truncate font-heading text-base font-bold">{blog.name}</h2>
+            <h2 className="truncate font-heading text-base font-bold">
+              {blog.name}
+            </h2>
             <Link
               to={blogPaths(blog.slug).home}
               target="_blank"
@@ -166,16 +193,33 @@ function BlogCard({ blog, onDelete }) {
 
       <div className="mt-4 grid grid-cols-3 gap-2 text-center">
         {[
-          { label: 'Publicadas', value: blog.posts_published, icon: FileText },
-          { label: 'Rascunhos', value: blog.posts_total - blog.posts_published, icon: FileText },
-          { label: 'Categorias', value: blog.categories_total, icon: Tags },
+          {
+            label: blog.posts_published === 1 ? "Publicada" : "Publicadas",
+            value: blog.posts_published,
+            icon: FileText,
+          },
+          {
+            label:
+              blog.posts_total - blog.posts_published === 1
+                ? "Rascunho"
+                : "Rascunhos",
+            value: blog.posts_total - blog.posts_published,
+            icon: FileText,
+          },
+          {
+            label: blog.categories_total === 1 ? "Categoria" : "Categorias",
+            value: blog.categories_total,
+            icon: Tags,
+          },
         ].map((s) => (
           <div
             key={s.label}
             className="rounded-theme px-2 py-2"
-            style={{ background: 'var(--c-surface)' }}
+            style={{ background: "var(--c-surface)" }}
           >
-            <span className="block font-heading text-lg font-black">{s.value}</span>
+            <span className="block font-heading text-lg font-black">
+              {s.value}
+            </span>
             <span className="block text-[10px] font-semibold uppercase tracking-wide opacity-55">
               {s.label}
             </span>
@@ -200,7 +244,7 @@ function BlogCard({ blog, onDelete }) {
           <FileText className="h-4 w-4" /> Posts
         </Link>
         <Link to={paths.appearance} className="btn btn-ghost">
-          <Eye className="h-4 w-4" /> Aparencia
+          <Eye className="h-4 w-4" /> Aparência
         </Link>
       </div>
     </div>
@@ -232,7 +276,7 @@ export default function BlogsPage({ openCreate = false }) {
   }
 
   useEffect(() => {
-    setPageTitle('Meus blogs');
+    setPageTitle("Meus blogs");
     load();
   }, []);
 
@@ -257,11 +301,15 @@ export default function BlogsPage({ openCreate = false }) {
         <div>
           <h1 className="font-heading text-2xl font-black">Meus blogs</h1>
           <p className="mt-1 text-sm opacity-70">
-            Cada blog tem aparencia, categorias e publicacoes independentes — e uma pasta exclusiva
-            de imagens.
+            Cada blog tem aparência, categorias e publicações independentes — e
+            uma pasta exclusiva de imagens.
           </p>
         </div>
-        <button type="button" className="btn btn-primary" onClick={() => setCreating(true)}>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={() => setCreating(true)}
+        >
           <Plus className="h-4 w-4" /> Novo blog
         </button>
       </div>
@@ -276,7 +324,11 @@ export default function BlogsPage({ openCreate = false }) {
           title="Nenhum blog ainda"
           description="Crie o primeiro blog para comecar a publicar."
           action={
-            <button type="button" className="btn btn-primary" onClick={() => setCreating(true)}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => setCreating(true)}
+            >
               <Plus className="h-4 w-4" /> Criar blog
             </button>
           }
@@ -293,7 +345,7 @@ export default function BlogsPage({ openCreate = false }) {
         <CreateBlogModal
           onClose={() => {
             setCreating(false);
-            if (openCreate) navigate('/admin', { replace: true });
+            if (openCreate) navigate("/admin", { replace: true });
           }}
           onCreated={(blog) => {
             setCreating(false);
@@ -304,16 +356,23 @@ export default function BlogsPage({ openCreate = false }) {
 
       {confirmDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-          <div className="card w-full max-w-md space-y-4 p-6" style={{ background: 'var(--c-bg)' }}>
+          <div
+            className="card w-full max-w-md space-y-4 p-6"
+            style={{ background: "var(--c-bg)" }}
+          >
             <h3 className="font-heading text-lg font-bold">Excluir blog</h3>
             <p className="text-sm opacity-75">
-              Tem certeza que deseja excluir <strong>{confirmDelete.name}</strong>? Todas as
-              publicacoes e categorias dele serao apagadas. Esta acao nao pode ser desfeita.
+              Tem certeza que deseja excluir{" "}
+              <strong>{confirmDelete.name}</strong>? Todas as publicações e
+              categorias dele serao apagadas. Esta acao nao pode ser desfeita.
             </p>
 
             <label
               className="flex cursor-pointer items-start gap-3 rounded-theme border px-3 py-3"
-              style={{ borderColor: 'var(--c-border)', background: 'var(--c-surface)' }}
+              style={{
+                borderColor: "var(--c-border)",
+                background: "var(--c-surface)",
+              }}
             >
               <input
                 type="checkbox"
@@ -322,10 +381,13 @@ export default function BlogsPage({ openCreate = false }) {
                 onChange={(e) => setDeleteImages(e.target.checked)}
               />
               <span className="text-xs">
-                <span className="font-semibold">Excluir tambem as imagens do Cloudinary</span>
+                <span className="font-semibold">
+                  Excluir tambem as imagens do Cloudinary
+                </span>
                 <span className="block opacity-70">
-                  Remove a pasta <code>{confirmDelete.storage_folder}</code> e todas as imagens
-                  dentro dela. Se deixar desmarcado, as imagens permanecem no Cloudinary.
+                  Remove a pasta <code>{confirmDelete.storage_folder}</code> e
+                  todas as imagens dentro dela. Se deixar desmarcado, as imagens
+                  permanecem no Cloudinary.
                 </span>
               </span>
             </label>
@@ -347,7 +409,11 @@ export default function BlogsPage({ openCreate = false }) {
                 onClick={remove}
                 disabled={busy}
               >
-                {busy ? <Spinner className="h-4 w-4" /> : <Trash2 className="h-4 w-4" />}
+                {busy ? (
+                  <Spinner className="h-4 w-4" />
+                ) : (
+                  <Trash2 className="h-4 w-4" />
+                )}
                 Excluir
               </button>
             </div>
