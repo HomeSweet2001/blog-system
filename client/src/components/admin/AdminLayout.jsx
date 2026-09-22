@@ -321,6 +321,7 @@ function AdminShell({ blogId }) {
               <Link
                 to={blogPaths(blog.slug).home}
                 className="btn btn-ghost hidden sm:inline-flex"
+                target="_blank"
               >
                 <ExternalLink className="h-4 w-4" /> Ver blog
               </Link>
