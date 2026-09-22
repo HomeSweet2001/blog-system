@@ -116,7 +116,7 @@ export default function PostsPage() {
           </p>
         </div>
         <Link to={paths.newPost} className="btn btn-primary">
-          <Plus className="h-4 w-4" /> Nova publicacao
+          <Plus className="h-4 w-4" /> Nova publicação
         </Link>
       </div>
 
@@ -168,11 +168,11 @@ export default function PostsPage() {
       ) : posts.length === 0 ? (
         <EmptyState
           icon={FileText}
-          title="Nenhuma publicacao encontrada"
-          description="Ajuste os filtros ou crie a primeira publicacao do blog."
+          title="Nenhuma publicação encontrada"
+          description="Ajuste os filtros ou crie a primeira publicação do blog."
           action={
             <Link to={paths.newPost} className="btn btn-primary">
-              <Plus className="h-4 w-4" /> Criar publicacao
+              <Plus className="h-4 w-4" /> Criar publicação
             </Link>
           }
         />
@@ -336,7 +336,7 @@ export default function PostsPage() {
             style={{ background: "var(--c-bg)" }}
           >
             <h3 className="font-heading text-lg font-bold">
-              Excluir publicacao
+              Excluir publicação
             </h3>
             <p className="mt-2 text-sm opacity-75">
               Tem certeza que deseja excluir{" "}
