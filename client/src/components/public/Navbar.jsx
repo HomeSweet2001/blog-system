@@ -129,7 +129,7 @@ export default function Navbar() {
             <input
               autoFocus
               className="input"
-              placeholder="Buscar publicacoes..."
+              placeholder="Buscar publicações..."
               value={term}
               onChange={(e) => setTerm(e.target.value)}
             />
