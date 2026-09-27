@@ -1,46 +1,46 @@
-import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Check, Eye, Save, Send, Trash2 } from 'lucide-react';
-import { apiAdminCategories, apiAdminPosts } from '../../lib/api.js';
-import { adminPaths, blogPaths } from '../../lib/urls.js';
-import { useBlog } from '../../context/BlogContext.jsx';
-import { setPageTitle } from '../../lib/theme.js';
-import MarkdownEditor from '../../components/admin/MarkdownEditor.jsx';
-import ImageField from '../../components/ui/ImageField.jsx';
-import { Alert, Spinner } from '../../components/ui/Feedback.jsx';
-import { toPlainText } from '../../lib/markdown.js';
+import { useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { ArrowLeft, Check, Eye, Save, Send, Trash2 } from "lucide-react";
+import { apiAdminCategories, apiAdminPosts } from "../../lib/api.js";
+import { adminPaths, blogPaths } from "../../lib/urls.js";
+import { useBlog } from "../../context/BlogContext.jsx";
+import { setPageTitle } from "../../lib/theme.js";
+import MarkdownEditor from "../../components/admin/MarkdownEditor.jsx";
+import ImageField from "../../components/ui/ImageField.jsx";
+import { Alert, Spinner } from "../../components/ui/Feedback.jsx";
+import { toPlainText } from "../../lib/markdown.js";
 
 const EMPTY = {
-  title: '',
-  slug: '',
-  excerpt: '',
+  title: "",
+  slug: "",
+  excerpt: "",
   excerpt_auto: true,
-  content: '',
+  content: "",
   cover_image: null,
-  category_id: '',
-  author: 'Admin',
-  status: 'draft',
+  category_id: "",
+  author: "Admin",
+  status: "draft",
   featured: false,
-  meta_title: '',
-  meta_description: '',
+  meta_title: "",
+  meta_description: "",
 };
 
 function slugify(text) {
-  return String(text || '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
+  return String(text || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/[^a-z0-9\s-]/g, "")
     .trim()
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
 }
 
 export default function PostEditorPage() {
   const { blog } = useBlog();
   const blogId = blog?.id;
   const paths = adminPaths(blogId || 0);
-  const publicPaths = blogPaths(blog?.slug || '');
+  const publicPaths = blogPaths(blog?.slug || "");
   const { id } = useParams();
   const isEditing = Boolean(id);
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ export default function PostEditorPage() {
 
   useEffect(() => {
     if (!blogId) return;
-    setPageTitle(isEditing ? 'Editar publicacao' : 'Nova publicacao');
+    setPageTitle(isEditing ? "Editar publicação" : "Nova publicação");
     apiAdminCategories
       .list(blogId)
       .then((data) => setCategories(data?.categories || []))
@@ -72,18 +72,18 @@ export default function PostEditorPage() {
         if (cancelled) return;
         const p = data.post;
         setForm({
-          title: p.title || '',
-          slug: p.slug || '',
-          excerpt: p.excerpt_auto ? '' : p.excerpt || '',
+          title: p.title || "",
+          slug: p.slug || "",
+          excerpt: p.excerpt_auto ? "" : p.excerpt || "",
           excerpt_auto: p.excerpt_auto !== false,
-          content: p.content || '',
+          content: p.content || "",
           cover_image: p.cover_image || null,
-          category_id: p.category_id ? String(p.category_id) : '',
-          author: p.author || 'Admin',
-          status: p.status || 'draft',
+          category_id: p.category_id ? String(p.category_id) : "",
+          author: p.author || "Admin",
+          status: p.status || "draft",
           featured: Boolean(p.featured),
-          meta_title: p.meta_title || '',
-          meta_description: p.meta_description || '',
+          meta_title: p.meta_title || "",
+          meta_description: p.meta_description || "",
         });
         setSlugLocked(true);
       })
@@ -99,7 +99,7 @@ export default function PostEditorPage() {
   function update(patch) {
     setForm((prev) => {
       const next = { ...prev, ...patch };
-      if (!slugLocked && 'title' in patch) next.slug = slugify(patch.title);
+      if (!slugLocked && "title" in patch) next.slug = slugify(patch.title);
       return next;
     });
     setSuccess(null);
@@ -110,7 +110,7 @@ export default function PostEditorPage() {
     setSuccess(null);
 
     if (!form.title.trim()) {
-      setError('O titulo e obrigatorio.');
+      setError("O título e obrigatório.");
       return;
     }
 
@@ -123,7 +123,7 @@ export default function PostEditorPage() {
         slug: form.slug || autoSlug,
         // Resumo automatico vai VAZIO: quem gera e o servidor, que tambem
         // registra a origem (assim a pagina do post nao repete o inicio do texto).
-        excerpt: form.excerpt_auto ? '' : form.excerpt,
+        excerpt: form.excerpt_auto ? "" : form.excerpt,
       };
 
       const data = isEditing
@@ -133,12 +133,14 @@ export default function PostEditorPage() {
       setForm((prev) => ({
         ...prev,
         ...data.post,
-        category_id: data.post.category_id ? String(data.post.category_id) : '',
-        excerpt: data.post.excerpt_auto ? '' : data.post.excerpt || '',
+        category_id: data.post.category_id ? String(data.post.category_id) : "",
+        excerpt: data.post.excerpt_auto ? "" : data.post.excerpt || "",
         excerpt_auto: data.post.excerpt_auto !== false,
       }));
       setSuccess(
-        payload.status === 'published' ? 'Publicacao salva e publicada!' : 'Rascunho salvo com sucesso!'
+        payload.status === "published"
+          ? "Publicação salva e publicada!"
+          : "Rascunho salvo com sucesso!",
       );
 
       if (!isEditing) {
@@ -152,7 +154,7 @@ export default function PostEditorPage() {
   }
 
   async function remove() {
-    if (!window.confirm('Excluir esta publicacao definitivamente?')) return;
+    if (!window.confirm("Excluir esta publicação definitivamente?")) return;
     setSaving(true);
     try {
       await apiAdminPosts.remove(blogId, id);
@@ -180,17 +182,17 @@ export default function PostEditorPage() {
           </Link>
           <div>
             <h1 className="font-heading text-xl font-black">
-              {isEditing ? 'Editar publicacao' : 'Nova publicacao'}
+              {isEditing ? "Editar publicação" : "Nova publicação"}
             </h1>
             <p className="text-xs opacity-60">
-              {form.status === 'published' ? 'Publicada' : 'Rascunho'}
-              {form.slug ? ` · /post/${form.slug}` : ''}
+              {form.status === "published" ? "Publicada" : "Rascunho"}
+              {form.slug ? ` · /post/${form.slug}` : ""}
             </p>
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          {isEditing && form.status === 'published' && (
+          {isEditing && form.status === "published" && (
             <a
               href={publicPaths.post(form.slug)}
               target="_blank"
@@ -201,7 +203,11 @@ export default function PostEditorPage() {
             </a>
           )}
           {isEditing && (
-            <button type="button" onClick={remove} className="btn btn-ghost text-red-600">
+            <button
+              type="button"
+              onClick={remove}
+              className="btn btn-ghost text-red-600"
+            >
               <Trash2 className="h-4 w-4" />
             </button>
           )}
@@ -209,19 +215,27 @@ export default function PostEditorPage() {
             type="button"
             className="btn btn-ghost"
             disabled={saving}
-            onClick={() => save('draft')}
+            onClick={() => save("draft")}
           >
-            {saving ? <Spinner className="h-4 w-4" /> : <Save className="h-4 w-4" />}
+            {saving ? (
+              <Spinner className="h-4 w-4" />
+            ) : (
+              <Save className="h-4 w-4" />
+            )}
             Salvar rascunho
           </button>
           <button
             type="button"
             className="btn btn-primary"
             disabled={saving}
-            onClick={() => save('published')}
+            onClick={() => save("published")}
           >
-            {saving ? <Spinner className="h-4 w-4" /> : <Send className="h-4 w-4" />}
-            {form.status === 'published' ? 'Atualizar' : 'Publicar'}
+            {saving ? (
+              <Spinner className="h-4 w-4" />
+            ) : (
+              <Send className="h-4 w-4" />
+            )}
+            {form.status === "published" ? "Atualizar" : "Publicar"}
           </button>
         </div>
       </div>
@@ -241,12 +255,12 @@ export default function PostEditorPage() {
           <div className="card space-y-4 p-5">
             <div>
               <label className="label" htmlFor="title">
-                Titulo
+                Título
               </label>
               <input
                 id="title"
                 className="input text-lg font-semibold"
-                placeholder="Um titulo envolvente..."
+                placeholder="Um título envolvente..."
                 value={form.title}
                 onChange={(e) => update({ title: e.target.value })}
               />
@@ -260,7 +274,7 @@ export default function PostEditorPage() {
                 <input
                   id="slug"
                   className="input font-mono text-xs"
-                  placeholder={autoSlug || 'meu-post'}
+                  placeholder={autoSlug || "meu-post"}
                   value={form.slug}
                   onChange={(e) => {
                     setSlugLocked(true);
@@ -292,7 +306,10 @@ export default function PostEditorPage() {
                     className="h-3.5 w-3.5"
                     checked={form.excerpt_auto}
                     onChange={(e) =>
-                      update({ excerpt_auto: e.target.checked, excerpt: e.target.checked ? '' : form.excerpt })
+                      update({
+                        excerpt_auto: e.target.checked,
+                        excerpt: e.target.checked ? "" : form.excerpt,
+                      })
                     }
                   />
                   Gerar automaticamente
@@ -303,7 +320,10 @@ export default function PostEditorPage() {
                 <>
                   <div
                     className="rounded-theme border px-3 py-2 text-sm opacity-70"
-                    style={{ borderColor: 'var(--c-border)', background: 'var(--c-surface)' }}
+                    style={{
+                      borderColor: "var(--c-border)",
+                      background: "var(--c-surface)",
+                    }}
                   >
                     {toPlainText(form.content, 220) || (
                       <span className="opacity-60">
@@ -312,8 +332,9 @@ export default function PostEditorPage() {
                     )}
                   </div>
                   <p className="mt-1.5 text-xs opacity-55">
-                    Gerado a partir do inicio do texto e usado nas listagens e na busca. Nao aparece
-                    na pagina do post (seria repetir o comeco do conteudo).
+                    Gerado a partir do início do texto e usado nas listagens e
+                    na busca. Não aparece na página do post (seria repetir o
+                    começo do conteúdo).
                   </p>
                 </>
               ) : (
@@ -321,12 +342,13 @@ export default function PostEditorPage() {
                   <textarea
                     id="excerpt"
                     className="input min-h-[80px] resize-y"
-                    placeholder="Escreva um resumo proprio, que sera exibido como introducao na pagina do post."
+                    placeholder="Escreva um resumo próprio, que será exibido como introdução na página do post."
                     value={form.excerpt}
                     onChange={(e) => update({ excerpt: e.target.value })}
                   />
                   <p className="mt-1.5 text-xs opacity-55">
-                    Aparece como introducao na pagina do post e tambem nas listagens.
+                    Aparece como introdução na página do post e também nas
+                    listagens.
                   </p>
                 </>
               )}
@@ -348,7 +370,7 @@ export default function PostEditorPage() {
             </h2>
             <div>
               <label className="label" htmlFor="meta_title">
-                Titulo para mecanismos de busca
+                Título para mecanismos de busca
               </label>
               <input
                 id="meta_title"
@@ -361,7 +383,7 @@ export default function PostEditorPage() {
             </div>
             <div>
               <label className="label" htmlFor="meta_description">
-                Descricao
+                Descrição
               </label>
               <textarea
                 id="meta_description"
@@ -382,7 +404,7 @@ export default function PostEditorPage() {
         <div className="space-y-5">
           <div className="card space-y-4 p-5">
             <h2 className="font-heading text-sm font-bold uppercase tracking-wide opacity-70">
-              Publicacao
+              Publicação
             </h2>
 
             <div>
@@ -434,7 +456,9 @@ export default function PostEditorPage() {
               />
               <span className="text-sm">
                 <span className="font-semibold">Destacar</span>
-                <span className="block text-xs opacity-60">Aparece primeiro na pagina inicial</span>
+                <span className="block text-xs opacity-60">
+                  Aparece primeiro na página inicial
+                </span>
               </span>
             </label>
           </div>
