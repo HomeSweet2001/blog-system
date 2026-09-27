@@ -126,11 +126,6 @@ export default function LoginPage() {
             )}
             {busy ? "Entrando..." : "Entrar"}
           </button>
-
-          <p className="text-center text-xs opacity-60">
-            Credenciais definidas nas variaveis ADMIN_USERNAME e ADMIN_PASSWORD
-            do servidor.
-          </p>
         </form>
       </div>
     </div>
