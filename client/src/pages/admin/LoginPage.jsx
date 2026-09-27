@@ -1,27 +1,27 @@
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { KeyRound, Lock, LogIn, User } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext.jsx';
-import { Alert, Spinner } from '../../components/ui/Feedback.jsx';
-import { setPageTitle } from '../../lib/theme.js';
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { KeyRound, Lock, LogIn, User } from "lucide-react";
+import { useAuth } from "../../context/AuthContext.jsx";
+import { Alert, Spinner } from "../../components/ui/Feedback.jsx";
+import { setPageTitle } from "../../lib/theme.js";
 
 export default function LoginPage() {
   const { login, isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setPageTitle('Entrar no painel');
+    setPageTitle("Entrar no painel");
   }, []);
 
   useEffect(() => {
     if (!loading && isAuthenticated) {
-      navigate(location.state?.from || '/admin', { replace: true });
+      navigate(location.state?.from || "/admin", { replace: true });
     }
   }, [isAuthenticated, loading, navigate, location.state]);
 
@@ -31,9 +31,9 @@ export default function LoginPage() {
     setBusy(true);
     try {
       await login(username.trim(), password);
-      navigate(location.state?.from || '/admin', { replace: true });
+      navigate(location.state?.from || "/admin", { replace: true });
     } catch (err) {
-      setError(err.message || 'Nao foi possivel entrar.');
+      setError(err.message || "Nao foi possivel entrar.");
     } finally {
       setBusy(false);
     }
@@ -43,9 +43,18 @@ export default function LoginPage() {
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-12">
       <div
         className="absolute inset-0"
-        style={{ background: 'linear-gradient(140deg, var(--c-primary), var(--c-secondary))' }}
+        style={{
+          background:
+            "linear-gradient(140deg, var(--c-primary), var(--c-secondary))",
+        }}
       />
-      <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(circle at 20% 20%, #fff, transparent 45%)' }} />
+      <div
+        className="absolute inset-0 opacity-20"
+        style={{
+          background:
+            "radial-gradient(circle at 20% 20%, #fff, transparent 45%)",
+        }}
+      />
 
       <div className="relative w-full max-w-md">
         <div className="mb-6 text-center text-white">
@@ -56,16 +65,19 @@ export default function LoginPage() {
         <form
           onSubmit={handleSubmit}
           className="card space-y-4 p-6 shadow-2xl sm:p-8"
-          style={{ background: 'var(--c-bg)' }}
+          style={{ background: "var(--c-bg)" }}
         >
           <div className="flex items-center gap-2 text-sm font-bold">
-            <KeyRound className="h-4 w-4" style={{ color: 'var(--c-primary)' }} />
+            <KeyRound
+              className="h-4 w-4"
+              style={{ color: "var(--c-primary)" }}
+            />
             Acesso restrito
           </div>
 
           <div>
             <label className="label" htmlFor="username">
-              Usuario
+              Usuário
             </label>
             <div className="relative">
               <User className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 opacity-40" />
@@ -102,13 +114,22 @@ export default function LoginPage() {
 
           {error && <Alert variant="error">{error}</Alert>}
 
-          <button type="submit" className="btn btn-primary w-full" disabled={busy}>
-            {busy ? <Spinner className="h-4 w-4" /> : <LogIn className="h-4 w-4" />}
-            {busy ? 'Entrando...' : 'Entrar'}
+          <button
+            type="submit"
+            className="btn btn-primary w-full"
+            disabled={busy}
+          >
+            {busy ? (
+              <Spinner className="h-4 w-4" />
+            ) : (
+              <LogIn className="h-4 w-4" />
+            )}
+            {busy ? "Entrando..." : "Entrar"}
           </button>
 
           <p className="text-center text-xs opacity-60">
-            Credenciais definidas nas variaveis ADMIN_USERNAME e ADMIN_PASSWORD do servidor.
+            Credenciais definidas nas variaveis ADMIN_USERNAME e ADMIN_PASSWORD
+            do servidor.
           </p>
         </form>
       </div>

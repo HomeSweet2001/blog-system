@@ -545,7 +545,7 @@ export default function AppearancePage() {
                   Paletas prontas
                 </h2>
                 <p className="mb-4 text-sm opacity-65">
-                  Clique em uma paleta para aplicar instantaneamente — voce pode
+                  Clique em uma paleta para aplicar instantaneamente — você pode
                   ajustar cada cor abaixo.
                 </p>
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">

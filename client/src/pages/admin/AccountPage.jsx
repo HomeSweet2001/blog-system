@@ -1,26 +1,26 @@
-import { useEffect, useState } from 'react';
-import { KeyRound, Save, ShieldCheck, User } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext.jsx';
-import { setPageTitle } from '../../lib/theme.js';
-import { Alert, Spinner } from '../../components/ui/Feedback.jsx';
+import { useEffect, useState } from "react";
+import { KeyRound, Save, ShieldCheck, User } from "lucide-react";
+import { useAuth } from "../../context/AuthContext.jsx";
+import { setPageTitle } from "../../lib/theme.js";
+import { Alert, Spinner } from "../../components/ui/Feedback.jsx";
 
 export default function AccountPage() {
   const { user, updateCredentials } = useAuth();
 
-  const [username, setUsername] = useState(user?.username || '');
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState(user?.username || "");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
   useEffect(() => {
-    setPageTitle('Minha conta');
+    setPageTitle("Minha conta");
   }, []);
 
   useEffect(() => {
-    setUsername(user?.username || '');
+    setUsername(user?.username || "");
   }, [user]);
 
   async function handleSubmit(e) {
@@ -29,15 +29,15 @@ export default function AccountPage() {
     setSuccess(null);
 
     if (newPassword && newPassword !== confirmPassword) {
-      setError('A confirmacao da nova senha nao confere.');
+      setError("A confirmacao da nova senha nao confere.");
       return;
     }
     if (newPassword && newPassword.length < 6) {
-      setError('A nova senha deve ter ao menos 6 caracteres.');
+      setError("A nova senha deve ter ao menos 6 caracteres.");
       return;
     }
     if (!currentPassword) {
-      setError('Informe a senha atual para confirmar as alteracoes.');
+      setError("Informe a senha atual para confirmar as alteracoes.");
       return;
     }
 
@@ -48,10 +48,10 @@ export default function AccountPage() {
         currentPassword,
         newPassword: newPassword || undefined,
       });
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-      setSuccess('Credenciais atualizadas com sucesso!');
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setSuccess("Credenciais atualizadas com sucesso!");
       setTimeout(() => setSuccess(null), 4000);
     } catch (err) {
       setError(err.message);
@@ -65,7 +65,8 @@ export default function AccountPage() {
       <div>
         <h1 className="font-heading text-2xl font-black">Minha conta</h1>
         <p className="mt-1 text-sm opacity-70">
-          Este blog possui um unico usuario administrador. Altere aqui o nome de usuario e a senha.
+          Este blog possui um único usuário administrador. Altere aqui o nome de
+          usuário e a senha.
         </p>
       </div>
 
@@ -73,12 +74,15 @@ export default function AccountPage() {
       {success && <Alert variant="success">{success}</Alert>}
 
       <form onSubmit={handleSubmit} className="card space-y-5 p-5 sm:p-6">
-        <div className="flex items-center gap-3 border-b pb-4" style={{ borderColor: 'var(--c-border)' }}>
+        <div
+          className="flex items-center gap-3 border-b pb-4"
+          style={{ borderColor: "var(--c-border)" }}
+        >
           <span
             className="flex h-11 w-11 items-center justify-center rounded-full text-lg font-black text-white"
-            style={{ background: 'var(--c-primary)' }}
+            style={{ background: "var(--c-primary)" }}
           >
-            {(user?.username || 'A').charAt(0).toUpperCase()}
+            {(user?.username || "A").charAt(0).toUpperCase()}
           </span>
           <div>
             <p className="font-bold">{user?.username}</p>
@@ -91,7 +95,7 @@ export default function AccountPage() {
         <div>
           <label className="label" htmlFor="username">
             <span className="inline-flex items-center gap-1.5">
-              <User className="h-3.5 w-3.5" /> Nome de usuario
+              <User className="h-3.5 w-3.5" /> Nome de usuário
             </span>
           </label>
           <input
@@ -104,7 +108,10 @@ export default function AccountPage() {
           />
         </div>
 
-        <div className="border-t pt-5" style={{ borderColor: 'var(--c-border)' }}>
+        <div
+          className="border-t pt-5"
+          style={{ borderColor: "var(--c-border)" }}
+        >
           <h2 className="mb-4 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wide opacity-70">
             <KeyRound className="h-4 w-4" /> Alterar senha
           </h2>
@@ -112,7 +119,7 @@ export default function AccountPage() {
           <div className="space-y-4">
             <div>
               <label className="label" htmlFor="currentPassword">
-                Senha atual (obrigatoria)
+                Senha atual (obrigatória)
               </label>
               <input
                 id="currentPassword"
@@ -157,9 +164,16 @@ export default function AccountPage() {
           </div>
         </div>
 
-        <div className="flex justify-end border-t pt-5" style={{ borderColor: 'var(--c-border)' }}>
+        <div
+          className="flex justify-end border-t pt-5"
+          style={{ borderColor: "var(--c-border)" }}
+        >
           <button type="submit" className="btn btn-primary" disabled={saving}>
-            {saving ? <Spinner className="h-4 w-4" /> : <Save className="h-4 w-4" />}
+            {saving ? (
+              <Spinner className="h-4 w-4" />
+            ) : (
+              <Save className="h-4 w-4" />
+            )}
             Salvar alteracoes
           </button>
         </div>
@@ -168,9 +182,11 @@ export default function AccountPage() {
       <div className="card p-5 text-sm opacity-75">
         <p className="font-semibold">Dica de seguranca</p>
         <p className="mt-1">
-          A senha inicial e definida pela variavel de ambiente <code>ADMIN_PASSWORD</code> no Render.
-          Alteracoes feitas aqui sao preservadas nos reinicios do servidor. Para forcar o servidor a
-          reaplicar a senha do ambiente, defina <code>ADMIN_PASSWORD_SYNC=true</code>.
+          A senha inicial e definida pela variavel de ambiente{" "}
+          <code>ADMIN_PASSWORD</code> no Render. Alterações feitas aqui são
+          preservadas nos reinícios do servidor. Para forcar o servidor a
+          reaplicar a senha do ambiente, defina{" "}
+          <code>ADMIN_PASSWORD_SYNC=true</code>.
         </p>
       </div>
     </div>

@@ -182,12 +182,12 @@ export default function PostsPage() {
             <table className="w-full min-w-[760px] text-sm">
               <thead style={{ background: "var(--c-surface)" }}>
                 <tr className="text-left text-xs uppercase tracking-wider opacity-70">
-                  <th className="px-4 py-3 font-bold">Titulo</th>
+                  <th className="px-4 py-3 font-bold">Título</th>
                   <th className="px-4 py-3 font-bold">Categoria</th>
                   <th className="px-4 py-3 font-bold">Status</th>
                   <th className="px-4 py-3 font-bold">Views</th>
                   <th className="px-4 py-3 font-bold">Data</th>
-                  <th className="px-4 py-3 text-right font-bold">Acoes</th>
+                  <th className="px-4 py-3 text-right font-bold">Ações</th>
                 </tr>
               </thead>
               <tbody
@@ -340,7 +340,7 @@ export default function PostsPage() {
             </h3>
             <p className="mt-2 text-sm opacity-75">
               Tem certeza que deseja excluir{" "}
-              <strong>{confirmDelete.title}</strong>? Esta acao nao pode ser
+              <strong>{confirmDelete.title}</strong>? Esta ação não pode ser
               desfeita.
             </p>
             <div className="mt-5 flex justify-end gap-2">
